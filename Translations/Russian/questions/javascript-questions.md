@@ -2,7 +2,7 @@
 
 Ответы для [Front-end Job Interview Questions - JS Questions](https://github.com/h5bp/Front-end-Developer-Interview-Questions/blob/master/questions/javascript-questions.md). Pull request'ы предложений и исправлений приветствуются!
 
-* [Делегирование событий](#explain-event-delegation)
+* [Расскажите о делегировании событий.](#explain-event-delegation)
 * [Как работает `this` в Javascript?](#explain-how-this-works-in-javascript)
 * [Как работает прототипное наследование?](#explain-how-prototypal-inheritance-works)
 * [Что вы думаете об AMD vs CommonJS?](#what-do-you-think-of-amd-vs-commonjs)
@@ -57,52 +57,52 @@
 * [Как вы можете разделять код между файлами?](#how-can-you-share-code-between-files)
 * [В каких обстоятельствах вы захотите использовать статические свойства или методы класса?](#why-you-might-want-to-create-static-class-members)
 
-### Explain event delegation
+### Расскажите о делегировании событий
 
-Event delegation is a technique involving adding event listeners to a parent element instead of adding them to the descendant elements. The listener will fire whenever the event is triggered on the descendant elements due to event bubbling up the DOM. The benefits of this technique are:
+Делегирование событий это техника, при который слушатель события ("event listener") навешивается на родительский элемент вместо того, чтобы добавлять его к каждому дочернему элементу. Слушатель события будет вызван каждый раз, когда событие произойдет на дочерних элементах, благодаря всплытию событий вверх по DOM дереву. Преимуществами данной техники являются:
 
-* Memory footprint goes down because only one single handler is needed on the parent element, rather than having to attach event handlers on each descendant.
-* There is no need to unbind the handler from elements that are removed and to bind the event for new elements.
+* Уменьшается расход памяти, потому что необходимо установить только один слушатель события на родительском элементе вместо его установки на каждый дочерний элемент.
+* Нет необходимость отключать слушатели событий от удаляемых элементов и подключать к новым добавляемым элементам.
 
-###### References
+###### Ссылки по теме
 
 * https://davidwalsh.name/event-delegate
 * https://stackoverflow.com/questions/1687296/what-is-dom-event-delegation
 
-[[↑] Back to top](#js-questions)
+[[↑] Наверх](#js-questions)
 
-### Explain how `this` works in JavaScript
+### Как работает `this` в Javascript?
 
-There's no simple explanation for `this`; it is one of the most confusing concepts in JavaScript. A hand-wavey explanation is that the value of `this` depends on how the function is called. I have read many explanations on `this` online, and I found [Arnav Aggrawal](https://medium.com/@arnav_aggarwal)'s explanation to be the clearest. The following rules are applied:
+Не существует простого объяснения для `this`; это одна из самых запутанных концепций в JavaScript. Грубое объяснение заключается в том, что `this` зависит от того, как функция была вызвана. Я прочитал много объяснений работы `this` в интернете, и я нахожу объяснение [Arnav Aggrawal](https://medium.com/@arnav_aggarwal) наиболее очевидным. Применяются следующий правилы:
 
-1. If the `new` keyword is used when calling the function, `this` inside the function is a brand new object.
-2. If `apply`, `call`, or `bind` are used to call/create a function, `this` inside the function is the object that is passed in as the argument.
-3. If a function is called as a method, such as `obj.method()` — `this` is the object that the function is a property of.
-4. If a function is invoked as a free function invocation, meaning it was invoked without any of the conditions present above, `this` is the global object. In a browser, it is the `window` object. If in strict mode (`'use strict'`), `this` will be `undefined` instead of the global object.
-5. If multiple of the above rules apply, the rule that is higher wins and will set the `this` value.
-6. If the function is an ES2015 arrow function, it ignores all the rules above and receives the `this` value of its surrounding scope at the time it is created.
+1. Если ключевое слово `new` используется при вызове функции, `this` внутри функции относится к создаваемому объекту.
+2. Если `apply`, `call` или `bind` используются для вызова/создания функции, `this` внутри такой функции соответствует объекту, переданному им в качестве аргумента.
+3. Если функция вызывается как метод, например `obj.method()`,  `this` будет являться ссылкой на объект, свойством которого является эта функция.
+4. Если функция вызывается без перечисленных выше условий, `this` указывает на глобальный объект. В браузере это объект `window`. Если вы используете строгий режим (`'use strict'`), `this` примет значение `undefined` вместо указания на глобальный объект.
+5. Если применяются несколько правил из этого списка, то правило, которое находится в списке выше побеждает и установит значение `this`.
+6. Если функция является ES2015 стрелочной функцией ("arrow function"), то она игнорирует все приведенные правила и получает `this` контекст из окружающей её на момент создания области видимости.
 
-For an in-depth explanation, do check out his [article on Medium](https://codeburst.io/the-simple-rules-to-this-in-javascript-35d97f31bde3).
+Для более глубокого объяснения вы можете ознакомиться с его [статьей на Medium](https://codeburst.io/the-simple-rules-to-this-in-javascript-35d97f31bde3).
 
-###### References
+###### Ссылки по теме
 
 * https://codeburst.io/the-simple-rules-to-this-in-javascript-35d97f31bde3
 * https://stackoverflow.com/a/3127440/1751946
 
-[[↑] Back to top](#js-questions)
+[[↑] Наверх](#js-questions)
 
-### Explain how prototypal inheritance works
+### Как работает прототипное наследование?
 
-This is an extremely common JavaScript interview question. All JavaScript objects have a `prototype` property, that is a reference to another object. When a property is accessed on an object and if the property is not found on that object, the JavaScript engine looks at the object's `prototype`, and the `prototype`'s `prototype` and so on, until it finds the property defined on one of the `prototype`s or until it reaches the end of the prototype chain. This behavior simulates classical inheritance, but it is really more of [delegation than inheritance](https://davidwalsh.name/javascript-objects).
+Это очень популярный вопрос на собеседовании. Все объекты в Javascript обладают `prototype` свойством, который является ссылкой на другой объект. Когда запрашивается свойство объекта, и это свойство не будет найдено в исходном объекте, Javascript будет искать это свойство в объекте, указанном в `prototype` исходного объекта, а потом в свойстве `prototype` указанного там объекта, и так до тех пор, пока не найдет нужное свойство или цепочка прототипов не прервется. Такое поведение имитирует классическое наследование,  но на самом деле это скорее [делегирование, чем наследование](https://davidwalsh.name/javascript-objects).
 
-###### References
+###### Ссылки по теме
 
 * https://www.quora.com/What-is-prototypal-inheritance/answer/Kyle-Simpson
 * https://davidwalsh.name/javascript-objects
 
-[[↑] Back to top](#js-questions)
+[[↑] Наверх](#js-questions)
 
-### What do you think of AMD vs CommonJS?
+### Что вы думаете об AMD vs CommonJS?
 
 Both are ways to implement a module system, which was not natively present in JavaScript until ES2015 came along. CommonJS is synchronous while AMD (Asynchronous Module Definition) is obviously asynchronous. CommonJS is designed with server-side development in mind while AMD, with its support for asynchronous loading of modules, is more intended for browsers.
 
