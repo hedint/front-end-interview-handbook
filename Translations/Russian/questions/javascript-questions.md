@@ -104,26 +104,26 @@
 
 ### Что вы думаете об AMD vs CommonJS?
 
-Both are ways to implement a module system, which was not natively present in JavaScript until ES2015 came along. CommonJS is synchronous while AMD (Asynchronous Module Definition) is obviously asynchronous. CommonJS is designed with server-side development in mind while AMD, with its support for asynchronous loading of modules, is more intended for browsers.
+Обе эти технологии служат для реализации модульной системы, которая не была представлена в Javascript до прихода  ES2015. CommonJS - синхронная реализация, тогда как AMD ("Asynchronous Module Definition"), очевидно, асинхронная. CommonJS разработана по большей части для серверной разработки, в то время как AMD, со своей поддержкой асинхронной загрузки модулей, больше подходит для использования в браузерах.
 
-I find AMD syntax to be quite verbose and CommonJS is closer to the style you would write import statements in other languages. Most of the time, I find AMD unnecessary, because if you served all your JavaScript into one concatenated bundle file, you wouldn't benefit from the async loading properties. Also, CommonJS syntax is closer to Node style of writing modules and there is less context-switching overhead when switching between client side and server side JavaScript development.
+Я нахожу AMD синтаксис довольно многословным, а CommonJS ближе к стилю в котором вы пишите импорты модулей на других языках. В большинстве случаев я нахожу AMD ненужным: если вы храните свой Javascript в одном объединенном файле, вы не выиграете ничего от асинхронной загрузки. К тому же, CommonJS синтаксис ближе к стилю написания модулей на Node, что влечет за собой меньше затрат на переключение контекста при переходе между клиентской и серверной разработкой на Javascript.
 
-I'm glad that with ES2015 modules, that has support for both synchronous and asynchronous loading, we can finally just stick to one approach. Although it hasn't been fully rolled out in browsers and in Node, we can always use transpilers to convert our code.
+Я рад, что с ES2015 модулями (которые поддерживают и синхронную, и асинхронную загрузку), мы можем, наконец, придерживаться одного подхода. И хотя новый синтаксис пока не обладает полной поддержкой во всех браузерах и Node, мы всегда можем использовать траспайлеры ("transpilers") для преобразования нашего кода.
 
-###### References
+###### Ссылки по теме
 
 * https://auth0.com/blog/javascript-module-systems-showdown/
 * https://stackoverflow.com/questions/16521471/relation-between-commonjs-amd-and-requirejs
 
-[[↑] Back to top](#js-questions)
+[[↑] Наверх](#js-questions)
 
-### Explain why the following doesn't work as an IIFE: `function foo(){ }();`. What needs to be changed to properly make it an IIFE?
+### Почему данная функция не работает как IIFE (Immediately Invoked Function Expression, немедленно вызываемая функция): `function foo(){ }();`. Что нужно изменить, чтобы заставить её работать?
 
-IIFE stands for Immediately Invoked Function Expressions. The JavaScript parser reads `function foo(){ }();` as `function foo(){ }` and `();`, where the former is a *function declaration* and the latter (a pair of brackets) is an attempt at calling a function but there is no name specified, hence it throws `Uncaught SyntaxError: Unexpected token )`.
+IIFE означает немедленно вызываемая функция. Javascript расценивает код `function foo(){ }();` как `function foo(){ }` и `();`, где первая конструкция является *объявлением функции* (function declaration), а последняя (пара скобок) является попыткой вызова функции, но имя не определено, поэтому появляется ошибка `Uncaught SyntaxError: Unexpected token )`.
 
-Here are two ways to fix it that involves adding more brackets: `(function foo(){ })()` and `(function foo(){ }())`. Statements that begin with `function` are considered to be *function declarations*; by wrapping this function within `()`, it becomes a *function expression* which can then be executed with the subsequent `()`. These functions are not exposed in the global scope and you can even omit its name if you do not need to reference itself within the body.
+Есть два способа исправить это, которые включают в себя добавление дополнительных скобок: `(function foo(){ })()` и `(function foo(){ }())`. Операторы, начинающиеся со слова `function`, являются *объявлением функции (function declaration)*; обернув эту функцию в `()`, мы получим *функциональное выражение (function expression)*, которое может быть вызвано с последующим `()`. Эти функции не будут помещены в глобальную область видимости, и вы можете даже не указывать их названия, если вам не нужно ссылаться на функцию внутри самой функции.
 
-You might also use `void` operator: `void function foo(){ }();`. Unfortunately, there is one issue with such approach. The evaluation of given expression is always `undefined`, so if your IIFE function returns anything, you can't use it. An example:
+Еще вы можете использовать `void` оператор: `void function foo(){ }();`. К сожалению, у этого подхода существует одна проблема. Результат выполнения этого выражения всегда undefined, поэтому если ваша IIFE функция что-то возвращает, вы не сможете его использовать. Пример:
 
 ```
 // Don't add JS syntax to this code block to prevent Prettier from formatting it.
@@ -132,16 +132,16 @@ const foo = void function bar() { return 'foo'; }();
 console.log(foo); // undefined
 ```
 
-###### References
+###### Ссылки по теме
 
 * http://lucybain.com/blog/2014/immediately-invoked-function-expression/
 * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/void
 
-[[↑] Back to top](#js-questions)
+[[↑] Наверх](#js-questions)
 
-### What's the difference between a variable that is: `null`, `undefined` or undeclared? How would you go about checking for any of these states?
+### В чем разница между `null`, `undefined` и необьявленными переменными?  Как вы можете проверить переменную на эти состояния?
 
-**Undeclared** variables are created when you assign a value to an identifier that is not previously created using `var`, `let` or `const`. Undeclared variables will be defined globally, outside of the current scope. In strict mode, a `ReferenceError` will be thrown when you try to assign to an undeclared variable. Undeclared variables are bad just like how global variables are bad. Avoid them at all cost! To check for them, wrap its usage in a `try`/`catch` block.
+**Необьявленные (Undeclared)** переменные создаются при назначении значения идентификатору, который не был предварительно создан с помощью  `var`, `let` or `const`. Необьявленные переменные определяются глобально, за пределами текущей области видимости. В строгом режиме, при попытке присваивания необъявленной переменной произойдет ошибка `ReferenceError`. Необъявленные переменные плохи так же, как и глобальные переменные. Избегайте их любой ценой! Чтобы проверить на них,  оберните использование такой переменной в блок `try`/`catch`.
 
 ```js
 function foo() {
@@ -152,7 +152,7 @@ foo();
 console.log(x); // 1
 ```
 
-A variable that is `undefined` is a variable that has been declared, but not assigned a value. It is of type `undefined`. If a function does not return any value as the result of executing it is assigned to a variable, the variable also has the value of `undefined`. To check for it, compare using the strict equality (`===`) operator or `typeof` which will give the `'undefined'` string. Note that you should not be using the abstract equality operator to check, as it will also return `true` if the value is `null`.
+`undefined` переменная это переменная, которая была объявлена, но значение которой не присвоено. Это один из типов `undefined`. Если функция не возвращает никакого значения в результате выполнения, то результатом её выполнения тоже будет `undefined`. Чтобы проверить на это, используйте оператор строгого сравнения  (`===`)  или `typeof`, который даст в результате строку `'undefined'`. Помните, что не стоит использовать оператор нестрого сравнения для проверки, так как он вернет `true` и при значении `null`. 
 
 ```js
 var foo;
@@ -167,7 +167,7 @@ var baz = bar();
 console.log(baz); // undefined
 ```
 
-A variable that is `null` will have been explicitly assigned to the `null` value. It represents no value and is different from `undefined` in the sense that it has been explicitly assigned. To check for `null,` simply compare using the strict equality operator. Note that like the above, you should not be using the abstract equality operator (`==`) to check, as it will also return `true` if the value is `undefined`.
+Переменная, значением которой является `null`, была явно присвоена `null` значению. Она не содержит в в себе фактического значения и отличается от undefined тем, что это отсутствие значение было явно присвоено переменной. Чтобы проверить на `null`, просто сравнению переменную с `null` с помощью оператора строго сравнения. Обратите внимание, что, как и в ситуации выше, вы не должны использовать оператор нестрогого сравнения (`==`) для проверки: он вернет `true` и при значении `undefined`.
 
 ```js
 var foo = null;
@@ -177,14 +177,14 @@ console.log(typeof foo === 'object'); // true
 console.log(foo == undefined); // true. Wrong, don't use this to check!
 ```
 
-As a personal habit, I never leave my variables undeclared or unassigned. I will explicitly assign `null` to them after declaring if I don't intend to use it yet. If you use a linter in your workflow, it will usually also be able to check that you are not referencing undeclared variables.
+Я никогда не оставляю мои переменные необъявленными или неопределенными. Я явно назначаю им `null` при объявлении, если не намерен использовать их прямо сейчас. Если вы используете линтер в своем рабочем процессе, он выдаст вам предупреждение при попытке использования необъявленной переменной.
 
-###### References
+###### Ссылки по теме
 
 * https://stackoverflow.com/questions/15985875/effect-of-declared-and-undeclared-variables
 * https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/undefined
 
-[[↑] Back to top](#js-questions)
+[[↑] Наверх](#js-questions)
 
 ### What is a closure, and how/why would you use one?
 
