@@ -12,7 +12,7 @@
 * [Опишите основное отличие перебора с помощью `.forEach` и `.map()`. По каким причинам стоит выбрать тот или иной метод?](#can-you-describe-the-main-difference-between-a-foreach-loop-and-a-map-loop-and-why-you-would-pick-one-versus-the-other)
 * [Каково основное применение анонимных функций?](#whats-a-typical-use-case-for-anonymous-functions)
 * [Как вы организуете свой код? (паттерн "Модуль", классическое наследование?)](#how-do-you-organize-your-code-module-pattern-classical-inheritance)
-* [В чем разница между хост объектами (объектами среды окружения) и нативными объектами?](#whats-the-difference-between-host-objects-and-native-objects)
+* [В чем разница между хост объектами (объектами среды выполнения) и нативными объектами?](#whats-the-difference-between-host-objects-and-native-objects)
 * [Обьясните разницу: `function Person(){}`, `var person = Person()`, и `var person = new Person()`?](#difference-between-function-person-var-person--person-and-var-person--new-person)
 * [Чем отличаются `.call` и `.apply`?](#whats-the-difference-between-call-and-apply)
 * [Обьясните принцип работы `Function.prototype.bind`.](#explain-functionprototypebind)
@@ -152,7 +152,7 @@ foo();
 console.log(x); // 1
 ```
 
-`undefined` переменная это переменная, которая была объявлена, но значение которой не присвоено. Это один из типов `undefined`. Если функция не возвращает никакого значения в результате выполнения, то результатом её выполнения тоже будет `undefined`. Чтобы проверить на это, используйте оператор строгого сравнения  (`===`)  или `typeof`, который даст в результате строку `'undefined'`. Помните, что не стоит использовать оператор нестрого сравнения для проверки, так как он вернет `true` и при значении `null`. 
+`undefined` переменная это такая переменная, которая была объявлена, но значение которой не присвоено. Это один из типов `undefined`. Если функция не возвращает никакого значения в результате выполнения, то результатом её выполнения тоже будет `undefined`. Чтобы проверить на это, используйте оператор строгого сравнения  (`===`)  или `typeof`, который даст в результате строку `'undefined'`. Помните, что не стоит использовать оператор нестрого сравнения для проверки, так как он вернет `true` и при значении `null`. 
 
 ```js
 var foo;
@@ -186,36 +186,36 @@ console.log(foo == undefined); // true. Wrong, don't use this to check!
 
 [[↑] Наверх](#js-questions)
 
-### What is a closure, and how/why would you use one?
+### Что такое замыкание? Как и почему вы должны его использовать?
 
-A closure is the combination of a function and the lexical environment within which that function was declared. The word "lexical" refers to the fact that lexical scoping uses the location where a variable is declared within the source code to determine where that variable is available. Closures are functions that have access to the outer (enclosing) function's variables—scope chain even after the outer function has returned.
+Замыкание это сочетения функции и лексического окружения, в котором эта функция была объявлена. Слово "лексичекий" отражает тот факт, что лексическая область видимости использует местоположение, в котором переменная была объявлена в исходном коде, чтобы определить, где эта переменная будет доступна. Замыкания являются функциями, которые имеют доступ к переменным внешней функции, в который они были объявлены (даже если внешняя функция уже завершила выполнение).
 
-**Why would you use one?**
+**Зачем использовать замыкания?**
 
-* Data privacy / emulating private methods with closures. Commonly used in the [module pattern](https://addyosmani.com/resources/essentialjsdesignpatterns/book/#modulepatternjavascript).
-* [Partial applications or currying](https://medium.com/javascript-scene/curry-or-partial-application-8150044c78b8#.l4b6l1i3x).
+* Конфиденциальность данных / реализация приватных методов через замыкания. Чаще всего используется в  [паттерне модуль](https://addyosmani.com/resources/essentialjsdesignpatterns/book/#modulepatternjavascript).
+* [Каррирование и частичное применение функций](https://medium.com/javascript-scene/curry-or-partial-application-8150044c78b8#.l4b6l1i3x).
 
-###### References
+###### Ссылки по теме
 
 * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures
 * https://medium.com/javascript-scene/master-the-javascript-interview-what-is-a-closure-b2f0d2152b36
 
-[[↑] Back to top](#js-questions)
+[[↑] Наверх](#js-questions)
 
-### Can you describe the main difference between a `.forEach` loop and a `.map()` loop and why you would pick one versus the other?
+### Опишите основное отличие перебора с помощью `.forEach` и `.map()`. По каким причинам стоит выбрать тот или иной метод?
 
-To understand the differences between the two, let's look at what each function does.
+Чтобы понять разницы между этими способами, давайте взглянем на то, что каждый из них делает.
 
 **`forEach`**
 
-* Iterates through the elements in an array.
-* Executes a callback for each element.
-* Does not return a value.
+* Перебирает элементы в массиве.
+* Выполняет функцию обратного вызова (callback) для каждого элемента.
+* Не возвращает значения
 
 ```js
 const a = [1, 2, 3];
 const doubled = a.forEach((num, index) => {
-  // Do something with num and/or index.
+  // Выполняем необходимые действия с num или index 
 });
 
 // doubled = undefined
@@ -223,8 +223,8 @@ const doubled = a.forEach((num, index) => {
 
 **`map`**
 
-* Iterates through the elements in an array.
-* "Maps" each element to a new element by calling the function on each element, creating a new array as a result.
+* Перебирает элементы в массиве.
+* Сопоставляет ("Maps") каждый элемент массива новому элементу, вызывая функцию (callback) для каждого элемента. Возвращает получившийся новый массив.
 
 ```js
 const a = [1, 2, 3];
@@ -235,17 +235,17 @@ const doubled = a.map(num => {
 // doubled = [2, 4, 6]
 ```
 
-The main difference between `.forEach` and `.map()` is that `.map()` returns a new array. If you need the result, but do not wish to mutate the original array, `.map()` is the clear choice. If you simply need to iterate over an array, `forEach` is a fine choice.
+Основное отличие между  `.forEach` и `.map()` в том что `.map()` возвращает новый массив. Если вам нужно получить результат, но вы не хотите изменять оригинальный массив,  `.map()` будет лучшим выбором. Если же вам просто нужно перебрать элементы массива, `forEach` будет отличным способом
 
-###### References
+###### Ссылки по теме
 
 * https://codeburst.io/javascript-map-vs-foreach-f38111822c0f
 
-[[↑] Back to top](#js-questions)
+[[↑] Наверх](#js-questions)
 
-### What's a typical use case for anonymous functions?
+### Каково основное применение анонимных функций?
 
-They can be used in IIFEs to encapsulate some code within a local scope so that variables declared in it do not leak to the global scope.
+Они могут использоваться как самовызывающиеся функции ("IIFE"), для инкапсуляции некоторого кода в локальной области видимости, в результате чего переменные, объявленные здесь, не попадут в глобальную область видимости.
 
 ```js
 (function() {
@@ -253,7 +253,7 @@ They can be used in IIFEs to encapsulate some code within a local scope so that 
 })();
 ```
 
-As a callback that is used once and does not need to be used anywhere else. The code will seem more self-contained and readable when handlers are defined right inside the code calling them, rather than having to search elsewhere to find the function body.
+Они могут использоваться как функция обратного вызова ("callback"), которая будет использована один раз и не нужна где-либо еще. Код будет выглядеть более автономным и читаемым, когда обработчики объявляются прямо внутри вызывающего их кода, вместо того чтобы искать их где-то еще, чтобы найти тело функции.
 
 ```js
 setTimeout(function() {
@@ -261,7 +261,7 @@ setTimeout(function() {
 }, 1000);
 ```
 
-Arguments to functional programming constructs or Lodash (similar to callbacks).
+Автономные функции могут использоваться как аргументы конструкций в стиле функционального программирования или Lodash (похоже на функции обратного вызова)
 
 ```js
 const arr = [1, 2, 3];
@@ -271,12 +271,12 @@ const double = arr.map(function(el) {
 console.log(double); // [2, 4, 6]
 ```
 
-###### References
+###### Ссылки по теме
 
 * https://www.quora.com/What-is-a-typical-usecase-for-anonymous-functions
 * https://stackoverflow.com/questions/10273185/what-are-the-benefits-to-using-anonymous-functions-instead-of-named-functions-fo
 
-[[↑] Back to top](#js-questions)
+[[↑] Наверх](#js-questions)
 
 ### How do you organize your code? (module pattern, classical inheritance?)
 
@@ -286,19 +286,19 @@ The module pattern is still great, but these days, I use React/Redux which utili
 
 I avoid using classical inheritance where possible. When and if I do, I stick to [these rules](https://medium.com/@dan_abramov/how-to-use-classes-and-sleep-at-night-9af8de78ccb4).
 
-[[↑] Back to top](#js-questions)
+[[↑] Наверх](#js-questions)
 
-### What's the difference between host objects and native objects?
+### В чем разница между хост объектами (объектами среды выполнения) и нативными объектами?
 
-Native objects are objects that are part of the JavaScript language defined by the ECMAScript specification, such as `String`, `Math`, `RegExp`, `Object`, `Function`, etc.
+Нативные объекты это часть языка JavaScript, заявленные спецификацией ECMAScript , такие как `String`, `Math`, `RegExp`, `Object`, `Function` и так далее.
 
-Host objects are provided by the runtime environment (browser or Node), such as `window`, `XMLHTTPRequest`, etc.
+Хост объекты предоставляются  средой выполнения (браузер или Node), такие как  `window`, `XMLHTTPRequest` и так далее.
 
-###### References
+###### Ссылки по теме
 
 * https://stackoverflow.com/questions/7614317/what-is-the-difference-between-native-objects-and-host-objects
 
-[[↑] Back to top](#js-questions)
+[[↑] Наверх](#js-questions)
 
 ### Difference between: `function Person(){}`, `var person = Person()`, and `var person = new Person()`?
 
