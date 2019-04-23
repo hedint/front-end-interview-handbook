@@ -55,7 +55,7 @@
 * [Можете ли вы привести пример каррирования ("curry") функции? В чем преимущества данного подхода?](#can-you-give-an-example-of-a-curry-function-and-why-this-syntax-offers-an-advantage)
 * [В чем преимущества использования "spread" синтаксиса и чем он отличается от "rest" синтаксиса?](#what-are-the-benefits-of-using-spread-syntax-and-how-is-it-different-from-rest-syntax)
 * [Как вы можете разделять код между файлами?](#how-can-you-share-code-between-files)
-* [В каких обстоятельствах вы захотите использовать статические свойства или методы класса?](#why-you-might-want-to-create-static-class-members)
+* [В каких обстоятельствах вы захотите использовать статические свойства/методы класса?](#why-you-might-want-to-create-static-class-members)
 
 ### Расскажите о делегировании событий
 
@@ -280,11 +280,14 @@ console.log(double); // [2, 4, 6]
 
 ### How do you organize your code? (module pattern, classical inheritance?)
 
-In the past, I used Backbone for my models which encourages a more OOP approach, creating Backbone models and attaching methods to them.
+В прошлом я использовал Backbone для моих моделей, что дает более ООП подход, создавая Backbone модели и присоединяя к ним методы.
+
+Паттерн модуль все еще хорош, но сейчас я использую React/Redux, которые используют однонаправленный поток данных на основе архитектуры Flux. Я создаю модели моего приложения, используя простые объекты и пишу чистые функции для управления этими объектами. Управление состоянием осуществляется с помощью действий (actions) и редьюсеров (reducers), как и в любом другом Redux приложении.
+
+Я избегаю классического наследования везде, где это возможно. Когда (и если) я это делаю, я придерживаюсь [этих правил](https://medium.com/@dan_abramov/how-to-use-classes-and-sleep-at-night-9af8de78ccb4)
 
 The module pattern is still great, but these days, I use React/Redux which utilize a single-directional data flow based on Flux architecture. I would represent my app's models using plain objects and write utility pure functions to manipulate these objects. State is manipulated using actions and reducers like in any other Redux application.
 
-I avoid using classical inheritance where possible. When and if I do, I stick to [these rules](https://medium.com/@dan_abramov/how-to-use-classes-and-sleep-at-night-9af8de78ccb4).
 
 [[↑] Наверх](#js-questions)
 
@@ -302,11 +305,11 @@ I avoid using classical inheritance where possible. When and if I do, I stick to
 
 ### Difference between: `function Person(){}`, `var person = Person()`, and `var person = new Person()`?
 
-This question is pretty vague. My best guess at its intention is that it is asking about constructors in JavaScript. Technically speaking, `function Person(){}` is just a normal function declaration. The convention is to use PascalCase for functions that are intended to be used as constructors.
+Этот вопрос довольно расплывчатый. Мое лучшее предположение: он спрашивает о конструкторах в Javascript. Формально говоря,   `function Person(){}` это обычное объявление функции. Соглашения предписывают использовать PascalCase для функций, которые будут использоваться в качестве конструкторов.
 
-`var person = Person()` invokes the `Person` as a function, and not as a constructor. Invoking as such is a common mistake if the function is intended to be used as a constructor. Typically, the constructor does not return anything, hence invoking the constructor like a normal function will return `undefined` and that gets assigned to the variable intended as the instance.
+`var person = Person()` вызывает `Person` как функцию, а не как конструктор. Подобный вызов является распространенной ошибкой, когда функция используется в качестве конструктора. Как правило, конструктор не возвращает никакого значения, поэтому вызов конструктора как обычной функции вернет `undefined` и присвоит его переменной, предзначенной предназначенной для экземпляра объекта ("instance").
 
-`var person = new Person()` creates an instance of the `Person` object using the `new` operator, which inherits from `Person.prototype`. An alternative would be to use `Object.create`, such as: `Object.create(Person.prototype)`.
+`var person = new Person()` создаст экземпляр объекта `Person`, используя оператор `new`, который наследует от `Person.prototype`. В качестве альтернативы можно использовать `Object.create`, например: `Object.create(Person.prototype)`.
 
 ```js
 function Person(name) {
@@ -322,15 +325,15 @@ console.log(person); // Person { name: "John" }
 console.log(person.name); // "john"
 ```
 
-###### References
+###### Ссылки по теме
 
 * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new
 
-[[↑] Back to top](#js-questions)
+[[↑] Наверх](#js-questions)
 
 ### What's the difference between `.call` and `.apply`?
 
-Both `.call` and `.apply` are used to invoke functions and the first parameter will be used as the value of `this` within the function. However, `.call` takes in comma-separated arguments as the next arguments while `.apply` takes in an array of arguments as the next argument. An easy way to remember this is C for `call` and comma-separated and A for `apply` and an array of arguments.
+И `.call`, и `.apply` применяются для вызова функций, и первый параметр будет использован в качестве значения контекста `this` внутри функции. Разница заключается в том, что `.call` принимает входные параметры, разделенные запятыми, в качестве следующих аргументов функции, в то время как `.apply` принимает массив в качестве следующего аргумента функции. 
 
 ```js
 function add(a, b) {
@@ -341,41 +344,40 @@ console.log(add.call(null, 1, 2)); // 3
 console.log(add.apply(null, [1, 2])); // 3
 ```
 
-[[↑] Back to top](#js-questions)
+[[↑] Наверх](#js-questions)
 
 ### Explain `Function.prototype.bind`.
 
-Taken word-for-word from [MDN](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_objects/Function/bind):
+Дословное объяснение с [MDN](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_objects/Function/bind):
 
-> The `bind()` method creates a new function that, when called, has its `this` keyword set to the provided value, with a given sequence of arguments preceding any provided when the new function is called.
+> Метод `bind()`создает новую функцию, которая при вызове будет использовать в качестве контекста `this` первый переданный аргумент, а остальные переданные в `bind()` аргументы будут использованы в качестве замены входящих аргументов исходной функции в заданном порядке.
 
-In my experience, it is most useful for binding the value of `this` in methods of classes that you want to pass into other functions. This is frequently done in React components.
+По моему опыту, это наиболее полезный прием для привязки контекста `this` к методам классов, которые вы хотите передать в другие функции. Эта возможность часто используется в React компонентах.
 
-###### References
+###### Ссылки по теме
 
 * https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_objects/Function/bind
 
-[[↑] Back to top](#js-questions)
+[[↑] Наверх](#js-questions)
 
 ### When would you use `document.write()`?
 
-`document.write()` writes a string of text to a document stream opened by `document.open()`. When `document.write()` is executed after the page has loaded, it will call `document.open` which clears the whole document (`<head>` and `<body>` removed!) and replaces the contents with the given parameter value. Hence it is usually considered dangerous and prone to misuse.
+`document.write()` записывает строку текста в поток документа, открытый с помощью `document.open()`. Когда `document.write()` выполняется после загрузки страницы, он вызывает  `document.open`, который полностью очищает текущий  документi (включая `<head>` и`<body>`!) и заменяет содержимым, переданным в качестве аргумента `document.write()`. По этой причине его применение обычно считается опасным, им не стоит злоупотреблять. 
 
-There are some answers online that explain `document.write()` is being used in analytics code or [when you want to include styles that should only work if JavaScript is enabled](https://www.quirksmode.org/blog/archives/2005/06/three_javascrip_1.html). It is even being used in HTML5 boilerplate to [load scripts in parallel and preserve execution order](https://github.com/paulirish/html5-boilerplate/wiki/Script-Loading-Techniques#documentwrite-script-tag)! However, I suspect those reasons might be outdated and in the modern day, they can be achieved without using `document.write()`. Please do correct me if I'm wrong about this.
+Некоторые статьи в интернете объясняют, что  `document.write()` используется в коде аналитических скриптов  или для [включения стилей, которые будут работать только при включенном Javascript в браузере](https://www.quirksmode.org/blog/archives/2005/06/three_javascrip_1.html). Он даже используется в HTML5 boilerplate для [параллельной загрузки скриптов и сохранения порядка выполнения](https://github.com/paulirish/html5-boilerplate/wiki/Script-Loading-Techniques#documentwrite-script-tag)! Тем не менее, я подозреваю что все эти причины могут быть устаревшими, и в наши дни похожих возможностей можно достичь и без применения `document.write()`. Поправьте меня, если я ошибаюсь.
 
-###### References
+###### Ссылки по теме
 
 * https://www.quirksmode.org/blog/archives/2005/06/three_javascrip_1.html
 * https://github.com/h5bp/html5-boilerplate/wiki/Script-Loading-Techniques#documentwrite-script-tag
 
-[[↑] Back to top](#js-questions)
+[[↑] Наверх](#js-questions)
 
 ### What's the difference between feature detection, feature inference, and using the UA string?
 
 **Feature Detection**
 
-Feature detection involves working out whether a browser supports a certain block of code, and running different code depending on whether it does (or doesn't), so that the browser can always provide a working experience rather crashing/erroring in some browsers. For example:
-
+Feature detection включает в себя работу по определению возможности поддержки браузером пользователя определенного блока кода и запуска разного кода в зависимости от того, поддерживается определенная возможность или нет, так что браузер всегда может обеспечить выполнение определенной работы вместо сбоя или ошибок в некоторых браузерах.
 ```js
 if ('geolocation' in navigator) {
   // Can use navigator.geolocation
@@ -384,11 +386,11 @@ if ('geolocation' in navigator) {
 }
 ```
 
-[Modernizr](https://modernizr.com/) is a great library to handle feature detection.
+[Modernizr](https://modernizr.com/) отличная библиотека для работы с feature detection.
 
 **Feature Inference**
 
-Feature inference checks for a feature just like feature detection, but uses another function because it assumes it will also exist, e.g.:
+Feature inference проверяет на наличие определенных возможностей так же, как и feature detection, но использует для этого проверку на другую возможность, предполагая, что она тоже будет существовать, например: 
 
 ```js
 if (document.getElementsByTagName) {
@@ -396,19 +398,19 @@ if (document.getElementsByTagName) {
 }
 ```
 
-This is not really recommended. Feature detection is more foolproof.
+Этот подход не рекомендуется. Feature detection является более надежным.
 
-**UA String**
+**строка User Agent**
 
-This is a browser-reported string that allows the network protocol peers to identify the application type, operating system, software vendor or software version of the requesting software user agent. It can be accessed via `navigator.userAgent`. However, the string is tricky to parse and can be spoofed. For example, Chrome reports both as Chrome and Safari. So to detect Safari you have to check for the Safari string and the absence of the Chrome string. Avoid this method.
+Это строка, предоставляемая браузером, позволяет узлам сетового протокола определять тип приложения, операционную систему, поставщика программного обеспечения или версию программного обеспечения запрашивающего агента пользователя. К ней можно получить доступ через `navigator.userAgent`. Тем не менее, эта строка сложна для парсинга и может быть подделана. Например, Chrome представляется и как Chrome, и как Safari. Поэтому для определения браузера Safari вы должны проверять на наличие строки Safari и отсутствие строки Chrome. Старайтесь избегать этого метода.
 
-###### References
+###### Ссылки по теме
 
 * https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Cross_browser_testing/Feature_detection
 * https://stackoverflow.com/questions/20104930/whats-the-difference-between-feature-detection-feature-inference-and-using-th
 * https://developer.mozilla.org/en-US/docs/Web/HTTP/Browser_detection_using_the_user_agent
 
-[[↑] Back to top](#js-questions)
+[[↑] Наверх](#js-questions)
 
 ### Explain Ajax in as much detail as possible.
 
