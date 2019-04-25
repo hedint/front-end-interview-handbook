@@ -305,7 +305,7 @@ The module pattern is still great, but these days, I use React/Redux which utili
 
 ### Difference between: `function Person(){}`, `var person = Person()`, and `var person = new Person()`?
 
-Этот вопрос довольно расплывчатый. Мое лучшее предположение: он спрашивает о конструкторах в Javascript. Формально говоря,   `function Person(){}` это обычное объявление функции. Соглашения предписывают использовать PascalCase для функций, которые будут использоваться в качестве конструкторов.
+Этот довольно расплывчатый вопрос. Мое лучшее предположение: тут спрашивается о конструкторах в Javascript. Формально говоря, `function Person(){}` это обычное объявление функции. Соглашения предписывают использовать PascalCase для функций, которые будут использоваться в качестве конструкторов.
 
 `var person = Person()` вызывает `Person` как функцию, а не как конструктор. Подобный вызов является распространенной ошибкой, когда функция используется в качестве конструктора. Как правило, конструктор не возвращает никакого значения, поэтому вызов конструктора как обычной функции вернет `undefined` и присвоит его переменной, предзначенной предназначенной для экземпляра объекта ("instance").
 
@@ -400,7 +400,7 @@ if (document.getElementsByTagName) {
 
 Этот подход не рекомендуется. Feature detection является более надежным.
 
-**строка User Agent**
+**Строка User Agent**
 
 Это строка, предоставляемая браузером, позволяет узлам сетового протокола определять тип приложения, операционную систему, поставщика программного обеспечения или версию программного обеспечения запрашивающего агента пользователя. К ней можно получить доступ через `navigator.userAgent`. Тем не менее, эта строка сложна для парсинга и может быть подделана. Например, Chrome представляется и как Chrome, и как Safari. Поэтому для определения браузера Safari вы должны проверять на наличие строки Safari и отсутствие строки Chrome. Старайтесь избегать этого метода.
 
@@ -414,46 +414,46 @@ if (document.getElementsByTagName) {
 
 ### Explain Ajax in as much detail as possible.
 
-Ajax (asynchronous JavaScript and XML) is a set of web development techniques using many web technologies on the client side to create asynchronous web applications. With Ajax, web applications can send data to and retrieve from a server asynchronously (in the background) without interfering with the display and behavior of the existing page. By decoupling the data interchange layer from the presentation layer, Ajax allows for web pages, and by extension web applications, to change content dynamically without the need to reload the entire page. In practice, modern implementations commonly substitute use JSON instead of XML, due to the advantages of JSON being native to JavaScript.
+Ajax (асинхронный JavaScript и XML) это набор методов web разработки, используюших множество wen технологий на стороне клиентской части для создания web приложений. C помощью Ajax, web приложения могут отпралять данные и получать ответ от сервера асинхронно (в фоне) без вмешательства в отображение и поведение текущей страницы. Отделяя слой обмена данными от слоя представления, Ajax позволяет web страницам и приложениям динамически изменять содержимое без необходимости перезагрузки всей страницы. На практике, современные реализации предпочитают использовать формат данные JSON вместо XML, так как JSON является нативным форматом для Javascript. 
 
-The `XMLHttpRequest` API is frequently used for the asynchronous communication or these days, the `fetch` API.
+Чаще всего для асинхронных запросов используется `XMLHttpRequest`, или более новая технология:  `fetch` API.
 
-###### References
+###### Ссылки по теме
 
 * https://en.wikipedia.org/wiki/Ajax_(programming)
 * https://developer.mozilla.org/en-US/docs/AJAX
 
-[[↑] Back to top](#js-questions)
+[[↑] Наверх](#js-questions)
 
 ### What are the advantages and disadvantages of using Ajax?
 
-**Advantages**
+**Преимущества**
 
-* Better interactivity. New content from the server can be changed dynamically without the need to reload the entire page.
-* Reduce connections to the server since scripts and stylesheets only have to be requested once.
-* State can be maintained on a page. JavaScript variables and DOM state will persist because the main container page was not reloaded.
-* Basically most of the advantages of an SPA.
+* Лучше интерактивность. Можно подгружать необходимые данные с сервера динамически без необходимости перезагружать всю страницу
+* Уменьшение количества запросов к сервису, так как необходимые скрипты и стили уже загружены.
+* Легче поддерживать состояние приложения. JavaScript переменные и состояние DOM дерева будут сохраняться, поскольку страница не будет перезагружена. 
+* Наибольшие преимущества достигаются при использовании в SPA (Single page application, одностраничные приложения).
 
-**Disadvantages**
+**Недостатки**
 
-* Dynamic webpages are harder to bookmark.
-* Does not work if JavaScript has been disabled in the browser.
-* Some webcrawlers do not execute JavaScript and would not see content that has been loaded by JavaScript.
-* Basically most of the disadvantages of an SPA.
+* Динамическое содержимое сложнее поместить в закладки браузера.
+* Не работает при отключенном Javascript в браузере.
+* Некоторые веб краулеры (поисковые роботы) не выполняют Javascript код и не могут увидеть контент, который загружаются с помощью Javascript.
+* Наибольшие недостатки проявляются при использовании в SPA.
 
-[[↑] Back to top](#js-questions)
+[[↑] Наверх](#js-questions)
 
 ### Explain how JSONP works (and how it's not really Ajax).
 
-JSONP (JSON with Padding) is a method commonly used to bypass the cross-domain policies in web browsers because Ajax requests from the current page to a cross-origin domain is not allowed.
+JSONP (JSON with Padding, JSON с дополнением) это метод, который обычно используется для обхода кросс доменных политик безопасности в браузере, поскольку Ajax запросы с текущей страницы на другие домены запрещены.
 
-JSONP works by making a request to a cross-origin domain via a `<script>` tag and usually with a `callback` query parameter, for example: `https://example.com?callback=printData`. The server will then wrap the data within a function called `printData` and return it to the client.
+JSONP работает, выполняя запрос к другому (cross-origin) домену с помощью `<script>` тега и обычно с параметром `callback` (функция обратного вызова) например: `https://example.com?callback=printData`. Сервер при ответе обернет необходимые данные вызовом функции `printData` и вернет результат на клиент.
 
 ```html
 <!-- https://mydomain.com -->
 <script>
 function printData(data) {
-  console.log(`My name is ${data.name}!`);
+  console.log(`Меня зовут ${data.name}!`);
 }
 </script>
 
@@ -461,21 +461,21 @@ function printData(data) {
 ```
 
 ```js
-// File loaded from https://example.com?callback=printData
-printData({ name: 'Yang Shun' });
+// Файл загруженный со страницы https://example.com?callback=printData
+printData({ name: 'Вячеслав Володин' });
 ```
 
-The client has to have the `printData` function in its global scope and the function will be executed by the client when the response from the cross-origin domain is received.
+На стороне клиента существует функция `printData` в глобальной области видимости, и эта функция будет вызвана, когда будет получен ответ с другого (cross-origin) домена.
 
-JSONP can be unsafe and has some security implications. As JSONP is really JavaScript, it can do everything else JavaScript can do, so you need to trust the provider of the JSONP data.
+Использование JSONP может иметь последствия для безопасности вашего приложения. Так как JSONP ответ это исполняемый Javascript код, он может сделать все что угодно, что может сделать обычный Javascript, то есть вы должны полностью доверять источнику данных при JSONP запросах.
 
-These days, [CORS](http://en.wikipedia.org/wiki/Cross-origin_resource_sharing) is the recommended approach and JSONP is seen as a hack.
+В наши дни,  [CORS](http://en.wikipedia.org/wiki/Cross-origin_resource_sharing) является рекомендуемым подходом, а JSON рассматривается как "хак".
 
-###### References
+###### Ссылки по теме
 
 * https://stackoverflow.com/a/2067584/1751946
 
-[[↑] Back to top](#js-questions)
+[[↑] Наверх](#js-questions)
 
 ### Have you ever used JavaScript templating? If so, what libraries have you used?
 
